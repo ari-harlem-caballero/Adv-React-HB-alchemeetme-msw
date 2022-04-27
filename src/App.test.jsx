@@ -9,6 +9,8 @@ import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import App from './App'
 
+global.fetch = fetch;
+
 const user = {
   id: 1,
   created_at: '2021-12-13T00:17:29+00:00',
@@ -23,7 +25,7 @@ const user = {
 
 // 🚨 Create your server
 const server = setupServer(
-  rest.get('https://uzgiamkrbapxufnwdrja.supabase.co', (req, res, ctx) =>
+  rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) =>
     res(ctx.json())
   )
 )
@@ -62,6 +64,11 @@ describe('App', () => {
     }
   
     // 🚨 Use the server to change the response for this test
+    server.use(
+      rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) => {
+        return res(ctx.json([sasuke]));
+      })
+    );
   
     render(<App />)
   
