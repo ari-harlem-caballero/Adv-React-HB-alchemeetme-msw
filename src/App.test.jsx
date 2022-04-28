@@ -9,8 +9,6 @@ import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import App from './App'
 
-global.fetch = fetch;
-
 const user = {
   id: 1,
   created_at: '2021-12-13T00:17:29+00:00',
@@ -26,7 +24,7 @@ const user = {
 // 🚨 Create your server
 const server = setupServer(
   rest.get(`${process.env.REACT_APP_SUPABASE_URL}/rest/v1/users`, (req, res, ctx) =>
-    res(ctx.json())
+    res(ctx.json([user]))
   )
 )
 
